@@ -1,0 +1,39 @@
+[Unit]
+Description=PiStation Dual-Display Kiosk Controller
+Documentation=https://github.com/DonaldoMoreno/PiStation
+# Start after the graphical session is ready
+After=graphical-session.target network-online.target
+Wants=network-online.target
+
+[Service]
+# Run as the kiosk user (created during setup)
+User=pistation
+Group=pistation
+
+# Working directory
+WorkingDirectory=/opt/pistation
+
+# Point Chromium at the correct X display (27-inch monitor)
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/pistation/.Xauthority
+# Override the target display via the variable the script reads
+Environment=KIOSK_DISPLAY=:0
+
+ExecStart=/opt/pistation/venv/bin/python /opt/pistation/kiosk.py
+
+# Always restart on failure so the kiosk recovers automatically
+Restart=always
+RestartSec=10
+
+# Give the process time to shut down gracefully
+TimeoutStopSec=15
+
+# Log to the journal with a unique identifier
+SyslogIdentifier=pistation-kiosk
+
+# Prevent the service accumulating too many log entries
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=graphical-session.target

@@ -109,11 +109,31 @@ usermod -aG video "$PISTATION_USER" || true
 # ---------------------------------------------------------------------------
 echo "[6/9] Installing PiStation to ${INSTALL_DIR}…"
 mkdir -p "$INSTALL_DIR"
+mkdir -p "$INSTALL_DIR/web"
+mkdir -p "$INSTALL_DIR/web/vendor/leaflet/images"
 cp kiosk.py "$INSTALL_DIR/kiosk.py"
 cp requirements.txt "$INSTALL_DIR/requirements.txt"
+cp web/index.html "$INSTALL_DIR/web/index.html"
+cp web/styles.css "$INSTALL_DIR/web/styles.css"
+cp web/app.js "$INSTALL_DIR/web/app.js"
+cp web/vendor/leaflet/leaflet.css "$INSTALL_DIR/web/vendor/leaflet/leaflet.css"
+cp web/vendor/leaflet/leaflet.js "$INSTALL_DIR/web/vendor/leaflet/leaflet.js"
+cp web/vendor/leaflet/images/marker-icon.png "$INSTALL_DIR/web/vendor/leaflet/images/marker-icon.png"
+cp web/vendor/leaflet/images/marker-icon-2x.png "$INSTALL_DIR/web/vendor/leaflet/images/marker-icon-2x.png"
+cp web/vendor/leaflet/images/marker-shadow.png "$INSTALL_DIR/web/vendor/leaflet/images/marker-shadow.png"
+cp web/vendor/leaflet/images/layers.png "$INSTALL_DIR/web/vendor/leaflet/images/layers.png"
+cp web/vendor/leaflet/images/layers-2x.png "$INSTALL_DIR/web/vendor/leaflet/images/layers-2x.png"
 chown -R "${PISTATION_USER}:${PISTATION_USER}" "$INSTALL_DIR"
 chmod 750 "$INSTALL_DIR"
 chmod 640 "$INSTALL_DIR/kiosk.py"
+chmod 640 "$INSTALL_DIR/web/index.html" "$INSTALL_DIR/web/styles.css" "$INSTALL_DIR/web/app.js"
+chmod 640 "$INSTALL_DIR/web/vendor/leaflet/leaflet.css" "$INSTALL_DIR/web/vendor/leaflet/leaflet.js"
+chmod 640 \
+    "$INSTALL_DIR/web/vendor/leaflet/images/marker-icon.png" \
+    "$INSTALL_DIR/web/vendor/leaflet/images/marker-icon-2x.png" \
+    "$INSTALL_DIR/web/vendor/leaflet/images/marker-shadow.png" \
+    "$INSTALL_DIR/web/vendor/leaflet/images/layers.png" \
+    "$INSTALL_DIR/web/vendor/leaflet/images/layers-2x.png"
 
 # ---------------------------------------------------------------------------
 # 7. Create Python virtual environment and install dependencies

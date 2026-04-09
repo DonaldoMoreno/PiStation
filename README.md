@@ -2,6 +2,13 @@
 
 Dual-display kiosk controller for Raspberry Pi 5.
 
+Supports two runtime modes:
+
+- **`selenium` mode** (default): rotates weather.com/retro + Google Maps and
+  auto-clicks the Retrocast button.
+- **`web` mode**: runs a fully web-based local dashboard (weather + map), with
+  no Selenium automation logic.
+
 - **27-inch monitor** — rotates between [weather.com/retro](https://weather.com/retro/) and
   [Google Maps](https://www.google.com/maps/@40.1365393,-83.1629969,11.25z) every 30 seconds;
   automatically clicks the *Retrocast* button on the weather page.
@@ -126,6 +133,47 @@ file:
 | `RETROCAST_BUTTON_TIMEOUT` | `10` | Max seconds to wait for the Retrocast button |
 | `MAIN_DISPLAY` | `":0"` (or `$KIOSK_DISPLAY` env var) | X display for the 27-inch monitor |
 | `CHROMEDRIVER_PATH` | `/usr/bin/chromedriver` | Path to ChromeDriver |
+
+Service-level environment variables (in
+`/etc/systemd/system/pistation-kiosk.service`):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `KIOSK_MODE` | `selenium` | Runtime mode: `selenium` or `web` |
+| `WEB_APP_URL` | `file:///opt/pistation/web/index.html` | Start page used in `web` mode |
+
+### Switch to fully web mode
+
+1. Edit service file:
+
+  ```bash
+  sudo nano /etc/systemd/system/pistation-kiosk.service
+  ```
+
+2. Set:
+
+  ```ini
+  Environment=KIOSK_MODE=web
+  Environment=WEB_APP_URL=file:///opt/pistation/web/index.html
+  ```
+
+3. Reload and restart:
+
+  ```bash
+  sudo systemctl daemon-reload
+  sudo systemctl restart pistation-kiosk.service
+  ```
+
+Optional URL params for web mode:
+
+- `lat` and `lon` to change location.
+- `rotate` to change panel rotation seconds.
+
+Example:
+
+```ini
+Environment=WEB_APP_URL=file:///opt/pistation/web/index.html?lat=40.1365&lon=-83.1630&rotate=20
+```
 
 After editing, restart the service:
 

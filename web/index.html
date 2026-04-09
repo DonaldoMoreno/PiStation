@@ -1,47 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PiStation Web Kiosk</title>
+  <title>PiStation Weather Network</title>
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700;800&family=Barlow+Condensed:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="bg-shape bg-shape-1" aria-hidden="true"></div>
-  <div class="bg-shape bg-shape-2" aria-hidden="true"></div>
+  <div class="screen-overlay" aria-hidden="true"></div>
 
-  <main class="kiosk">
-    <header class="topbar">
-      <h1>PiStation Web Mode</h1>
-      <div class="clock" id="clock">--:--:--</div>
+  <main class="dashboard">
+    <header class="hero-panel panel frame-in" aria-label="Encabezado principal">
+      <div class="hero-row">
+        <div>
+          <p class="channel">THE WEATHER CHANNEL STYLE NETWORK</p>
+          <h1>PiStation Local Forecast Center</h1>
+        </div>
+        <div class="clock" id="clock">--:--:--</div>
+      </div>
+      <div class="controls">
+        <label for="citySelect">Ciudad</label>
+        <select id="citySelect" aria-label="Seleccionar ciudad"></select>
+        <button id="themeToggle" class="toggle-btn" type="button" aria-pressed="false">Modo Claro</button>
+        <button id="audioToggle" class="toggle-btn" type="button" aria-pressed="false">Audio: ON</button>
+      </div>
     </header>
 
-    <section class="viewport" id="viewport">
-      <article class="panel panel-weather active" data-panel="weather" aria-live="polite">
-        <h2>Weather</h2>
-        <div class="weather-main">
-          <div class="temp" id="temp">--°</div>
-          <div class="meta">
-            <p id="summary">Loading weather...</p>
-            <p id="location">Lat --, Lon --</p>
-            <p id="updated">Updated: --</p>
+    <section class="grid-windows">
+      <article class="panel frame-in" aria-live="polite">
+        <div class="panel-head">
+          <h2>Current Conditions</h2>
+          <span class="pill">LIVE</span>
+        </div>
+        <div class="current-layout">
+          <div class="temp-wrap">
+            <div class="temp" id="temp">--°</div>
+            <div class="city" id="selectedCity">Columbus</div>
+            <div class="summary" id="summary">Cargando clima...</div>
+          </div>
+          <div class="icon-wrap">
+            <div class="weather-icon" id="weatherIcon" aria-hidden="true">●</div>
+            <p id="updated">Actualizado: --</p>
+          </div>
+        </div>
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <span class="metric-label">Humedad</span>
+            <span class="metric-value" id="humidity">--%</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">Punto de rocio</span>
+            <span class="metric-value" id="dewPoint">--°</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">Visibilidad</span>
+            <span class="metric-value" id="visibility">-- km</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">Presion</span>
+            <span class="metric-value" id="pressure">-- hPa</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">Indice de calor</span>
+            <span class="metric-value" id="heatIndex">--°</span>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">Viento</span>
+            <span class="metric-value" id="wind">--</span>
           </div>
         </div>
       </article>
 
-      <article class="panel panel-map" data-panel="map">
-        <h2>Map</h2>
-        <div id="mapFrame" role="img" aria-label="Map view"></div>
+      <article class="panel frame-in">
+        <div class="panel-head">
+          <h2>Latest Observations</h2>
+          <span class="pill">REGIONAL</span>
+        </div>
+        <div class="observations-wrap">
+          <table class="obs-table" aria-label="Observaciones recientes">
+            <thead>
+              <tr>
+                <th>Ciudad</th>
+                <th>Temp</th>
+                <th>Estado</th>
+                <th>Dir</th>
+                <th>Vel</th>
+              </tr>
+            </thead>
+            <tbody id="observationsBody">
+              <tr><td colspan="5">Cargando observaciones...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel frame-in">
+        <div class="panel-head">
+          <h2>Mapa Columbus, Ohio</h2>
+          <span class="pill" id="mapModeLabel">BASE MAP</span>
+        </div>
+        <div class="map-stack">
+          <div id="mapFrame" class="map-layer visible" role="img" aria-label="Mapa base Columbus"></div>
+          <iframe
+            id="trafficFrame"
+            class="map-layer"
+            title="Mapa de trafico Columbus"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://embed.waze.com/iframe?zoom=11&lat=39.9612&lon=-82.9988"
+          ></iframe>
+        </div>
+      </article>
+
+      <article class="panel frame-in">
+        <div class="panel-head">
+          <h2>Almanac</h2>
+          <span class="pill">SUN + MOON</span>
+        </div>
+        <div class="almanac-layout">
+          <div class="sun-times">
+            <div><span>Amanecer</span><strong id="sunrise">--:--</strong></div>
+            <div><span>Atardecer</span><strong id="sunset">--:--</strong></div>
+          </div>
+          <div class="moon-visual" id="moonVisual" aria-hidden="true">
+            <div class="moon-disc"></div>
+          </div>
+        </div>
+        <ul class="moon-phases" id="moonPhases">
+          <li>Cargando fases lunares...</li>
+        </ul>
       </article>
     </section>
 
-    <footer class="footer">
-      <p id="rotationInfo">Switching view every 30s</p>
-      <p>Mode: Fully web kiosk (no Selenium)</p>
+    <footer class="statusbar panel frame-in">
+      <p id="statusInfo">Actualizacion automatica en curso</p>
+      <p id="location">Lat --, Lon --</p>
     </footer>
   </main>
 

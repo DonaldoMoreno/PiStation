@@ -18,6 +18,10 @@ Environment=DISPLAY=:0
 Environment=XAUTHORITY=/home/pistation/.Xauthority
 # Override the target display via the variable the script reads
 Environment=KIOSK_DISPLAY=:0
+# KIOSK_MODE can be: selenium (default) or web
+Environment=KIOSK_MODE=selenium
+# URL for web mode; supports file:// or http(s)://
+Environment=WEB_APP_URL=file:///opt/pistation/web/index.html
 
 ExecStart=/opt/pistation/venv/bin/python /opt/pistation/kiosk.py
 

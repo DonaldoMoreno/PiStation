@@ -14,6 +14,7 @@ Secondary display (5-inch touchscreen):
 
 import logging
 import os
+import subprocess
 import time
 from urllib.parse import urlparse
 
@@ -60,6 +61,15 @@ MAIN_DISPLAY = os.environ.get("KIOSK_DISPLAY", ":0")
 
 # Path to the ChromeDriver executable installed by setup.sh
 CHROMEDRIVER_PATH = "/usr/bin/chromedriver"
+
+# Kiosk mode:
+# - selenium: existing behaviour (page rotation + Retrocast click)
+# - web: launch a local web app in Chromium kiosk mode
+KIOSK_MODE = os.environ.get("KIOSK_MODE", "selenium").strip().lower()
+
+# URL used by web mode.
+# Use a local file by default so it works without an additional web server.
+WEB_APP_URL = os.environ.get("WEB_APP_URL", "file:///opt/pistation/web/index.html")
 
 # ---------------------------------------------------------------------------
 # Logging
@@ -188,8 +198,8 @@ def load_page(driver: webdriver.Chrome, url: str) -> bool:
 # ---------------------------------------------------------------------------
 
 
-def run_kiosk() -> None:
-    """Entry point for the kiosk rotation loop."""
+def run_selenium_kiosk() -> None:
+    """Entry point for the selenium-based kiosk rotation loop."""
     driver: webdriver.Chrome | None = None
     consecutive_failures = 0
 
@@ -252,9 +262,46 @@ def run_kiosk() -> None:
                 break
 
 
+def run_web_kiosk() -> None:
+    """Launch and supervise the standalone web kiosk app in Chromium."""
+    cmd = [
+        "/usr/bin/chromium-browser",
+        "--kiosk",
+        "--noerrdialogs",
+        "--disable-infobars",
+        "--disable-session-crashed-bubble",
+        "--disable-restore-session-state",
+        "--no-first-run",
+        "--no-default-browser-check",
+        f"--display={MAIN_DISPLAY}",
+        WEB_APP_URL,
+    ]
+
+    log.info("PiStation web kiosk starting (display=%s, url=%s).", MAIN_DISPLAY, WEB_APP_URL)
+
+    while True:
+        try:
+            proc = subprocess.Popen(cmd)
+            exit_code = proc.wait()
+            log.warning("Chromium exited with code %s. Restarting in %d seconds.", exit_code, 5)
+            time.sleep(5)
+        except KeyboardInterrupt:
+            log.info("Interrupted by user. Shutting down.")
+            return
+        except Exception as exc:
+            log.error("Failed to launch web kiosk: %s", exc)
+            log.info("Retrying in %d seconds.", FAILURE_PAUSE)
+            time.sleep(FAILURE_PAUSE)
+
+
 def main() -> None:
     try:
-        run_kiosk()
+        if KIOSK_MODE == "web":
+            run_web_kiosk()
+        else:
+            if KIOSK_MODE != "selenium":
+                log.warning("Unknown KIOSK_MODE='%s'. Falling back to 'selenium'.", KIOSK_MODE)
+            run_selenium_kiosk()
     except KeyboardInterrupt:
         log.info("Interrupted by user. Shutting down.")
 

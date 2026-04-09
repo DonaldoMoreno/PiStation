@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PiStation Web Kiosk</title>
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-shape bg-shape-1" aria-hidden="true"></div>
+  <div class="bg-shape bg-shape-2" aria-hidden="true"></div>
+
+  <main class="kiosk">
+    <header class="topbar">
+      <h1>PiStation Web Mode</h1>
+      <div class="clock" id="clock">--:--:--</div>
+    </header>
+
+    <section class="viewport" id="viewport">
+      <article class="panel panel-weather active" data-panel="weather" aria-live="polite">
+        <h2>Weather</h2>
+        <div class="weather-main">
+          <div class="temp" id="temp">--°</div>
+          <div class="meta">
+            <p id="summary">Loading weather...</p>
+            <p id="location">Lat --, Lon --</p>
+            <p id="updated">Updated: --</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel panel-map" data-panel="map">
+        <h2>Map</h2>
+        <div id="mapFrame" role="img" aria-label="Map view"></div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <p id="rotationInfo">Switching view every 30s</p>
+      <p>Mode: Fully web kiosk (no Selenium)</p>
+    </footer>
+  </main>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="app.js" defer></script>
+</body>
+</html>

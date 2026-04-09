@@ -1,0 +1,4 @@
+broadcast-weather/node_modules/
+broadcast-weather/.next/
+broadcast-weather/.env.local
+*.log

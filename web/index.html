@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,7 +14,7 @@
   <div class="screen-overlay" aria-hidden="true"></div>
 
   <main class="dashboard">
-    <header class="hero-panel panel frame-in" aria-label="Encabezado principal">
+    <header class="hero-panel panel frame-in" aria-label="Main header">
       <div class="hero-row">
         <div>
           <p class="channel">THE WEATHER CHANNEL STYLE NETWORK</p>
@@ -23,9 +23,9 @@
         <div class="clock" id="clock">--:--:--</div>
       </div>
       <div class="controls">
-        <label for="citySelect">Ciudad</label>
-        <select id="citySelect" aria-label="Seleccionar ciudad"></select>
-        <button id="themeToggle" class="toggle-btn" type="button" aria-pressed="false">Modo Claro</button>
+        <label for="citySelect">City</label>
+        <select id="citySelect" aria-label="Select city"></select>
+        <button id="themeToggle" class="toggle-btn" type="button" aria-pressed="false">Light Mode</button>
         <button id="audioToggle" class="toggle-btn" type="button" aria-pressed="false">Audio: ON</button>
       </div>
     </header>
@@ -39,37 +39,37 @@
         <div class="current-layout">
           <div class="temp-wrap">
             <div class="temp" id="temp">--°</div>
-            <div class="city" id="selectedCity">Columbus</div>
-            <div class="summary" id="summary">Cargando clima...</div>
+            <div class="city" id="selectedCity">East Liberty</div>
+            <div class="summary" id="summary">Loading weather...</div>
           </div>
           <div class="icon-wrap">
             <div class="weather-icon" id="weatherIcon" aria-hidden="true">●</div>
-            <p id="updated">Actualizado: --</p>
+            <p id="updated">Updated: --</p>
           </div>
         </div>
         <div class="metrics-grid">
           <div class="metric-box">
-            <span class="metric-label">Humedad</span>
+            <span class="metric-label">Humidity</span>
             <span class="metric-value" id="humidity">--%</span>
           </div>
           <div class="metric-box">
-            <span class="metric-label">Punto de rocio</span>
+            <span class="metric-label">Dew point</span>
             <span class="metric-value" id="dewPoint">--°</span>
           </div>
           <div class="metric-box">
-            <span class="metric-label">Visibilidad</span>
+            <span class="metric-label">Visibility</span>
             <span class="metric-value" id="visibility">-- km</span>
           </div>
           <div class="metric-box">
-            <span class="metric-label">Presion</span>
+            <span class="metric-label">Pressure</span>
             <span class="metric-value" id="pressure">-- hPa</span>
           </div>
           <div class="metric-box">
-            <span class="metric-label">Indice de calor</span>
+            <span class="metric-label">Heat index</span>
             <span class="metric-value" id="heatIndex">--°</span>
           </div>
           <div class="metric-box">
-            <span class="metric-label">Viento</span>
+            <span class="metric-label">Wind</span>
             <span class="metric-value" id="wind">--</span>
           </div>
         </div>
@@ -81,18 +81,18 @@
           <span class="pill">REGIONAL</span>
         </div>
         <div class="observations-wrap">
-          <table class="obs-table" aria-label="Observaciones recientes">
+          <table class="obs-table" aria-label="Latest observations">
             <thead>
               <tr>
-                <th>Ciudad</th>
+                <th>City</th>
                 <th>Temp</th>
-                <th>Estado</th>
+                <th>Condition</th>
                 <th>Dir</th>
-                <th>Vel</th>
+                <th>Speed</th>
               </tr>
             </thead>
             <tbody id="observationsBody">
-              <tr><td colspan="5">Cargando observaciones...</td></tr>
+              <tr><td colspan="5">Loading observations...</td></tr>
             </tbody>
           </table>
         </div>
@@ -100,18 +100,24 @@
 
       <article class="panel frame-in">
         <div class="panel-head">
-          <h2>Mapa Columbus, Ohio</h2>
+          <h2>Map - Columbus Metro</h2>
           <span class="pill" id="mapModeLabel">BASE MAP</span>
         </div>
         <div class="map-stack">
-          <div id="mapFrame" class="map-layer visible" role="img" aria-label="Mapa base Columbus"></div>
+          <div id="routeLegend" class="route-legend" aria-label="Route info">
+            <span class="route-legend-icon">&#x1F697;</span>
+            <span class="route-legend-time">--</span>
+            <span class="route-legend-sep">&bull;</span>
+            <span class="route-legend-dist">-- mi</span>
+          </div>
+          <div id="mapFrame" class="map-layer visible" role="img" aria-label="Base map"></div>
           <iframe
             id="trafficFrame"
             class="map-layer"
-            title="Mapa de trafico Columbus"
+            title="East Liberty traffic map"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            src="https://embed.waze.com/iframe?zoom=11&lat=39.9612&lon=-82.9988"
+            data-src="https://embed.waze.com/iframe?zoom=11&lat=40.0829597&lon=-83.2116116"
           ></iframe>
         </div>
       </article>
@@ -123,21 +129,21 @@
         </div>
         <div class="almanac-layout">
           <div class="sun-times">
-            <div><span>Amanecer</span><strong id="sunrise">--:--</strong></div>
-            <div><span>Atardecer</span><strong id="sunset">--:--</strong></div>
+            <div><span>Sunrise</span><strong id="sunrise">--:--</strong></div>
+            <div><span>Sunset</span><strong id="sunset">--:--</strong></div>
           </div>
           <div class="moon-visual" id="moonVisual" aria-hidden="true">
             <div class="moon-disc"></div>
           </div>
         </div>
         <ul class="moon-phases" id="moonPhases">
-          <li>Cargando fases lunares...</li>
+          <li>Loading moon phases...</li>
         </ul>
       </article>
     </section>
 
     <footer class="statusbar panel frame-in">
-      <p id="statusInfo">Actualizacion automatica en curso</p>
+      <p id="statusInfo">Automatic updates in progress</p>
       <p id="location">Lat --, Lon --</p>
     </footer>
   </main>

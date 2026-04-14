@@ -45,6 +45,10 @@ body {
     linear-gradient(155deg, var(--bg-main), var(--bg-alt));
 }
 
+body.lite {
+  background: linear-gradient(155deg, var(--bg-main), var(--bg-alt));
+}
+
 .screen-overlay {
   position: fixed;
   inset: 0;
@@ -78,6 +82,19 @@ body {
   border-radius: 18px;
   backdrop-filter: blur(12px);
   box-shadow: 0 14px 36px rgba(5, 13, 30, 0.36);
+}
+
+body.lite .screen-overlay {
+  display: none;
+}
+
+body.lite .panel {
+  backdrop-filter: none;
+  box-shadow: 0 8px 18px rgba(5, 13, 30, 0.3);
+}
+
+body.lite .frame-in {
+  animation: none;
 }
 
 .frame-in {
@@ -175,6 +192,175 @@ body.light .toggle-btn {
   grid-template-rows: 1fr 1fr;
 }
 
+body.panel-single .grid-windows {
+  height: 100%;
+  display: block;
+}
+
+body.panel-single .grid-windows > article {
+  display: none;
+  height: 100%;
+}
+
+body.panel-single .grid-windows > article.panel-active {
+  display: grid;
+}
+
+body.panel-single .hero-panel {
+  padding: 1.2rem 1.35rem;
+}
+
+body.panel-single .channel {
+  font-size: 0.98rem;
+}
+
+body.panel-single h1 {
+  font-size: clamp(2.9rem, 5.8vw, 4.4rem);
+}
+
+body.panel-single h2 {
+  font-size: clamp(2.2rem, 4.3vw, 3.4rem);
+}
+
+body.panel-single .clock {
+  font-size: clamp(2.2rem, 4.4vw, 3.2rem);
+  padding: 0.62rem 1.05rem;
+}
+
+body.panel-single .controls {
+  gap: 0.9rem;
+}
+
+body.panel-single select,
+body.panel-single .toggle-btn {
+  font-size: 1.14rem;
+  padding: 0.64rem 0.92rem;
+}
+
+body.panel-single .panel-head {
+  padding: 1rem 1.15rem;
+}
+
+body.panel-single .pill {
+  font-size: 1rem;
+  padding: 0.35rem 0.8rem;
+}
+
+body.panel-single .current-layout {
+  padding: 1.45rem;
+}
+
+body.panel-single .temp {
+  font-size: clamp(7.8rem, 17vw, 13.6rem);
+}
+
+body.panel-single .city {
+  font-size: 2.5rem;
+}
+
+body.panel-single .summary {
+  font-size: 1.95rem;
+}
+
+body.panel-single .icon-wrap {
+  min-width: 250px;
+  font-size: 1.35rem;
+}
+
+body.panel-single .weather-icon {
+  font-size: 7.6rem;
+}
+
+body.panel-single .metrics-grid {
+  padding: 0 1.2rem 1.2rem;
+  gap: 0.75rem;
+}
+
+body.panel-single .metric-box {
+  padding: 0.75rem;
+}
+
+body.panel-single .metric-label {
+  font-size: 1.12rem;
+}
+
+body.panel-single .metric-value {
+  font-size: 1.95rem;
+}
+
+body.panel-single .obs-table th,
+body.panel-single .obs-table td {
+  font-size: 1.55rem;
+  padding: 0.9rem 0.72rem;
+}
+
+body.panel-single .obs-table th {
+  font-size: 1.18rem;
+}
+
+body.panel-single .map-stack {
+  min-height: 680px;
+}
+
+body.panel-single .almanac-layout {
+  padding: 1.12rem;
+}
+
+body.panel-single .sun-times div {
+  min-width: 220px;
+  padding: 0.7rem 0.86rem;
+}
+
+body.panel-single .sun-times span {
+  font-size: 1rem;
+}
+
+body.panel-single .sun-times strong {
+  font-size: 2.45rem;
+}
+
+body.panel-single .moon-visual {
+  width: 330px;
+  height: 330px;
+  align-self: center;
+  justify-self: center;
+  margin: 0 auto;
+}
+
+body.panel-single .moon-phases {
+  padding: 0 1.12rem 1.1rem;
+  gap: 0.7rem;
+}
+
+body.panel-single .moon-phases li {
+  font-size: 1.5rem;
+  padding: 0.84rem 1rem;
+  gap: 0.7rem;
+}
+
+body.panel-single .moon-name {
+  font-size: 1.2rem;
+}
+
+body.panel-single .moon-icon {
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+body.panel-single .moon-date {
+  font-size: 1.45rem;
+}
+
+body.panel-single .statusbar {
+  font-size: 1.35rem;
+  padding: 1rem 1.3rem;
+}
+
+body.kiosk-fixed .grid-windows {
+  grid-template-columns: 1.05fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
 .grid-windows > article {
   min-height: 0;
   display: grid;
@@ -239,6 +425,10 @@ body.light .toggle-btn {
   font-size: 3rem;
   line-height: 1;
   animation: bob 3.4s ease-in-out infinite;
+}
+
+body.lite .weather-icon {
+  animation: none;
 }
 
 .weather-icon.sunny {
@@ -319,6 +509,63 @@ body.light .toggle-btn {
   border: 1px solid rgba(186, 214, 250, 0.26);
 }
 
+/* --- Route legend overlay --- */
+.route-legend {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 10px;
+  padding: 8px 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
+  font-family: "Barlow", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  pointer-events: none;
+}
+
+.route-legend-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.route-legend-time {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+.route-legend-sep {
+  color: #aaa;
+  font-weight: 400;
+}
+
+.route-legend-dist {
+  font-size: 1rem;
+  color: #444;
+}
+
+body.panel-single .route-legend {
+  top: 16px;
+  left: 16px;
+  padding: 10px 18px;
+  font-size: 1.25rem;
+  border-radius: 12px;
+}
+
+body.panel-single .route-legend-time {
+  font-size: 1.4rem;
+}
+
+body.panel-single .route-legend-dist {
+  font-size: 1.2rem;
+}
+
 .map-layer {
   position: absolute;
   inset: 0;
@@ -328,6 +575,10 @@ body.light .toggle-btn {
   opacity: 0;
   pointer-events: none;
   transition: opacity 540ms ease;
+}
+
+body.lite .map-layer {
+  transition: none;
 }
 
 .map-layer.visible {
@@ -366,10 +617,13 @@ body.light .toggle-btn {
 }
 
 .moon-visual {
-  width: 82px;
-  height: 82px;
+  width: 164px;
+  height: 164px;
   border-radius: 50%;
   padding: 6px;
+  align-self: center;
+  justify-self: center;
+  margin: 0 auto;
   background: radial-gradient(circle at 32% 26%, #f9f9ef, #b0bac8 68%, #79889f 100%);
   box-shadow: 0 0 22px rgba(209, 231, 255, 0.3);
 }
@@ -398,6 +652,55 @@ body.light .toggle-btn {
   border-radius: 9px;
   padding: 0.38rem 0.55rem;
   font-size: 0.9rem;
+}
+
+.moon-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.moon-date {
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* --- Route map markers & tooltips --- */
+.route-pin {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+.route-pin--start {
+  background: #34a853;
+}
+
+.route-pin--end {
+  background: #ea4335;
+}
+
+.route-tooltip {
+  background: rgba(10, 22, 52, 0.92) !important;
+  border: 1px solid rgba(100, 160, 255, 0.45) !important;
+  border-radius: 8px !important;
+  color: #e8f0ff !important;
+  font-family: "Barlow Condensed", sans-serif !important;
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  padding: 4px 10px !important;
+  white-space: nowrap !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+}
+
+.route-tooltip::before {
+  display: none !important;
+}
+
+body.panel-single .route-tooltip {
+  font-size: 1.1rem !important;
+  padding: 6px 14px !important;
 }
 
 .moon-name {
@@ -456,8 +759,26 @@ body.light .toggle-btn {
     grid-template-rows: none;
   }
 
+  body.kiosk-fixed {
+    overflow: hidden;
+  }
+
+  body.kiosk-fixed .dashboard {
+    height: 100%;
+    min-height: 0;
+  }
+
+  body.kiosk-fixed .grid-windows {
+    grid-template-columns: 1.05fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
   .metrics-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.kiosk-fixed .metrics-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -477,5 +798,22 @@ body.light .toggle-btn {
   .statusbar {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  body.kiosk-fixed .current-layout {
+    flex-direction: row;
+  }
+
+  body.kiosk-fixed .icon-wrap {
+    justify-items: center;
+  }
+
+  body.kiosk-fixed .metrics-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  body.kiosk-fixed .statusbar {
+    flex-direction: row;
+    align-items: center;
   }
 }

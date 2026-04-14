@@ -85,8 +85,9 @@ cat > "$XRANDR_SCRIPT" <<'XRANDREOF'
 # Adjust connector names and resolutions to match your hardware.
 # Run `xrandr` while both displays are connected to see current connector names.
 
-# Set 27-inch monitor (HDMI-1) as the primary display at 1920x1080@60Hz
-xrandr --output HDMI-1 --primary --mode 1920x1080 --rate 60 \
+# Set 27-inch monitor (HDMI-1) as the primary display at 1280x720@30Hz
+# to reduce rendering load on low-power devices like Raspberry Pi 3.
+xrandr --output HDMI-1 --primary --mode 1280x720 --rate 30 \
        --output HDMI-2 --mode 800x480 --right-of HDMI-1 || true
 XRANDREOF
 chmod +x "$XRANDR_SCRIPT"

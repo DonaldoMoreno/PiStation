@@ -4,9 +4,9 @@ Dual-display kiosk controller for Raspberry Pi 5.
 
 Supports two runtime modes:
 
-- **`selenium` mode** (default): rotates weather.com/retro + Google Maps and
+- **`selenium` mode**: rotates weather.com/retro + Google Maps and
   auto-clicks the Retrocast button.
-- **`web` mode**: runs a fully web-based local dashboard (weather + map), with
+- **`web` mode** (default): runs a fully web-based local dashboard (weather + map), with
   no Selenium automation logic.
 
 - **27-inch monitor** — rotates between [weather.com/retro](https://weather.com/retro/) and
@@ -67,12 +67,14 @@ The 27-inch monitor should be the **primary** output.
 If you need to set the 27-inch monitor as primary explicitly:
 
 ```bash
-xrandr --output HDMI-1 --primary --mode 1920x1080 --rate 60 \
+xrandr --output HDMI-1 --primary --mode 1280x720 --rate 30 \
        --output HDMI-2 --mode 800x480
 ```
 
 > **Note:** Adjust `HDMI-1` / `HDMI-2`, resolutions, and refresh rates to
 > match your actual hardware.
+>
+> For Raspberry Pi 3 stability, prefer `1280x720 --rate 30` on the main monitor.
 
 ### 4. Run the setup script
 
@@ -139,7 +141,7 @@ Service-level environment variables (in
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `KIOSK_MODE` | `selenium` | Runtime mode: `selenium` or `web` |
+| `KIOSK_MODE` | `web` | Runtime mode: `selenium` or `web` |
 | `WEB_APP_URL` | `file:///opt/pistation/web/index.html` | Start page used in `web` mode |
 
 ### Switch to fully web mode
@@ -167,12 +169,19 @@ Service-level environment variables (in
 Optional URL params for web mode:
 
 - `lat` and `lon` to change location.
-- `rotate` to change panel rotation seconds.
+- `rotate` to change weather/observations refresh seconds (minimum effective value: `120`).
+- `traffic=1` to enable embedded traffic panel rotation (disabled by default to save resources).
+- `lite=0` to disable lightweight visual mode (enabled by default).
 
 Example:
 
 ```ini
 Environment=WEB_APP_URL=file:///opt/pistation/web/index.html?lat=40.1365&lon=-83.1630&rotate=20
+
+# Resource-saving defaults (Pi 3 recommended)
+#   - no traffic iframe
+#   - lightweight visual mode
+Environment=WEB_APP_URL=file:///opt/pistation/web/index.html?rotate=180
 ```
 
 After editing, restart the service:

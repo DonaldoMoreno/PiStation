@@ -1,5 +1,6 @@
 package com.donaldomoreno.pistation.tv.model
 
+import android.graphics.Color
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -82,7 +83,10 @@ data class TrafficRoute(
     val status: RouteTrafficStatus,
     val colorHex: String,
     val points: List<RoutePoint>,
-)
+) {
+    val colorInt: Int
+        get() = Color.parseColor(colorHex)
+}
 
 @Serializable
 data class DashboardData(

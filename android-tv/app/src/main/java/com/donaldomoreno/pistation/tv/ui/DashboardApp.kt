@@ -305,7 +305,7 @@ private fun TrafficScreen(routes: List<TrafficRoute>) {
                     Column(modifier = Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(route.label, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                         Text("${route.adjustedMinutes} min · ${route.distanceKm} km", style = MaterialTheme.typography.headlineSmall)
-                        Text("Base ${route.baseMinutes} min · ${route.status.displayName}", color = Color(android.graphics.Color.parseColor(route.colorHex)))
+                        Text("Base ${route.baseMinutes} min · ${route.status.displayName}", color = Color(route.colorInt))
                     }
                 }
             }

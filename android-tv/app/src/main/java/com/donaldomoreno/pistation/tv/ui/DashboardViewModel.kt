@@ -19,7 +19,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/** Matches the 15-second screen cadence used by the broadcast-weather app. */
 private const val ROTATE_INTERVAL_MS = 15_000L
+
+/** Keeps parity with the original dashboard's 5-minute weather refresh cycle. */
 private const val REFRESH_INTERVAL_MS = 5 * 60 * 1000L
 
 data class DashboardUiState(

@@ -13,6 +13,7 @@ import com.donaldomoreno.pistation.tv.domain.format.formatVisibilityKm
 import com.donaldomoreno.pistation.tv.domain.format.formatWeekday
 import com.donaldomoreno.pistation.tv.domain.format.formatWind
 import com.donaldomoreno.pistation.tv.domain.format.haversineDistanceKm
+import com.donaldomoreno.pistation.tv.domain.format.roundToSingleDecimal
 import com.donaldomoreno.pistation.tv.domain.format.toWindDirection
 import com.donaldomoreno.pistation.tv.domain.format.weatherCodeToText
 import com.donaldomoreno.pistation.tv.domain.format.weatherIcon
@@ -33,8 +34,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import kotlin.math.roundToInt
-
-private fun Double.roundToSingleDecimal(): Double = (this * 10.0).roundToInt() / 10.0
 
 interface DashboardRepository {
     fun observeDashboard(): Flow<DashboardData?>
@@ -162,8 +161,8 @@ class DefaultDashboardRepository(
                     TrafficRoute(
                         id = destination.key,
                         label = "${CityCatalog.routeOrigin.name} → ${destination.name}",
-                        distanceKm = distanceKm.roundToSingleDecimal(),
-                        baseMinutes = baseMinutes.roundToSingleDecimal(),
+                        distanceKm = roundToSingleDecimal(distanceKm),
+                        baseMinutes = roundToSingleDecimal(baseMinutes),
                         adjustedMinutes = simulation.adjustedMinutes,
                         status = simulation.status,
                         colorHex = simulation.colorHex,
@@ -176,8 +175,8 @@ class DefaultDashboardRepository(
                     TrafficRoute(
                         id = destination.key,
                         label = "${CityCatalog.routeOrigin.name} → ${destination.name}",
-                        distanceKm = distanceKm.roundToSingleDecimal(),
-                        baseMinutes = baseMinutes.roundToSingleDecimal(),
+                        distanceKm = roundToSingleDecimal(distanceKm),
+                        baseMinutes = roundToSingleDecimal(baseMinutes),
                         adjustedMinutes = simulation.adjustedMinutes,
                         status = simulation.status,
                         colorHex = simulation.colorHex,

@@ -16,7 +16,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
-private const val FALLBACK_ROUTE_COLOR = "#1F8BC8"
+private const val DEFAULT_ROUTE_COLOR = "#1F8BC8"
 
 @Composable
 fun RouteMap(
@@ -44,7 +44,7 @@ fun RouteMap(
             if (points.isNotEmpty()) {
                 val polyline = Polyline().apply {
                     setPoints(points)
-                    color = android.graphics.Color.parseColor(primary?.colorHex ?: FALLBACK_ROUTE_COLOR)
+                    color = primary?.colorInt ?: android.graphics.Color.parseColor(DEFAULT_ROUTE_COLOR)
                     width = 10f
                 }
                 mapView.overlays += polyline

@@ -5,6 +5,10 @@ import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 class TrafficSimulationService {
+    private companion object {
+        const val TRAFFIC_BUCKET_MS = 180000L
+    }
+
     data class Simulation(
         val adjustedMinutes: Int,
         val status: RouteTrafficStatus,
@@ -12,7 +16,7 @@ class TrafficSimulationService {
     )
 
     fun simulate(routeId: String, baseMinutes: Double, nowEpochMillis: Long): Simulation {
-        val bucket = nowEpochMillis / 180000L
+        val bucket = nowEpochMillis / TRAFFIC_BUCKET_MS
         val raw = (routeId.hashCode().toLong() * 31L + bucket).absoluteValue
         val factor = 1.0 + ((raw % 61L) / 100.0)
         val adjusted = (baseMinutes * factor).roundToInt().coerceAtLeast(1)

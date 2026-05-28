@@ -1,31 +1,31 @@
 # PiStation Android TV
 
-Proyecto Android TV nativo en Kotlin que adapta el flujo principal de PiStation a una experiencia pensada para DPAD y pantallas 16:9.
+Native Kotlin Android TV project that adapts the main PiStation flow into a DPAD-first 16:9 television experience.
 
-## Qué replica del proyecto original
+## What it preserves from the original repository
 
-- Rotación automática entre 4 pantallas principales.
-- Selector de ciudad y actualización periódica de datos.
-- Condiciones actuales, observaciones regionales, almanaque solar/lunar y mapa de tráfico/rutas.
-- Estados offline con caché local y recuperación cuando regresa la red.
-- Controles equivalentes para pausa de rotación, cambio de tema, audio de transición y refresco manual.
+- Auto-rotation across 4 main screens.
+- City selection and periodic live data refresh.
+- Current conditions, regional observations, solar/lunar almanac, and route/traffic views.
+- Offline fallback with local cache and reconnection refresh.
+- Equivalent controls for rotation pause, theme switch, transition audio, and manual refresh.
 
-## Adaptaciones específicas para TV
+## TV-specific adaptations
 
-- Se reemplazó la automatización Selenium del modo `weather.com/retro + Google Maps` por una navegación nativa entre pantallas; en Android TV controlar sitios externos no es una estrategia robusta.
-- La UI usa targets grandes, jerarquía visual amplia y controles pensados para foco DPAD.
-- El mapa usa `osmdroid` para evitar dependencias de API keys y mantener un stack nativo.
-- La persistencia usa Room + DataStore para soportar caché y preferencias locales.
+- The Selenium `weather.com/retro + Google Maps` mode was replaced by native TV navigation; automating third-party websites is not a robust Android TV strategy.
+- The UI uses large focus targets, strong hierarchy, and remote-friendly grouping for DPAD navigation.
+- The map uses `osmdroid` to stay native and avoid API-key requirements.
+- Persistence uses Room + DataStore to support offline cache and local preferences.
 
-## Arquitectura
+## Architecture
 
-- **UI**: Jetpack Compose con una pantalla principal de dashboard y componentes reutilizables.
-- **Business logic**: `DashboardViewModel`, servicios de moon phase, simulación de tráfico y formateo.
-- **Repositories**: `DashboardRepository` y `SettingsRepository`.
-- **Networking**: Retrofit + OkHttp contra Open-Meteo y OSRM.
-- **Persistencia**: Room para caché de dashboard y DataStore para preferencias.
+- **UI**: Jetpack Compose dashboard screen with reusable TV controls.
+- **Business logic**: `DashboardViewModel`, moon phase service, traffic simulation service, and formatting utilities.
+- **Repositories**: `DashboardRepository` and `SettingsRepository`.
+- **Networking**: Retrofit + OkHttp against Open-Meteo and OSRM.
+- **Persistence**: Room for cached dashboard payloads and DataStore for user settings.
 
-## Estructura
+## Structure
 
 ```text
 android-tv/
@@ -47,44 +47,44 @@ android-tv/
 └── settings.gradle.kts
 ```
 
-## Compatibilidad mínima
+## Minimum compatibility
 
 - **Android TV 8.0 (API 26)**
-- Compilación objetivo: **Android SDK 34**
-- JDK recomendado: **17**
+- Target compile level: **Android SDK 34**
+- Recommended JDK: **17**
 
-## Build y ejecución
+## Build and run
 
 ```bash
 cd android-tv
 ./gradlew assembleDebug
 ```
 
-APK resultante:
+Expected APK:
 
 ```text
 android-tv/app/build/outputs/apk/debug/app-debug.apk
 ```
 
-## Decisiones arquitectónicas
+## Architecture decisions
 
-1. **MVVM** para desacoplar UI de reglas de negocio.
-2. **Flow** como contrato principal entre repositorios, caché y view model.
-3. **Refresh resiliente**: primero se expone caché local y luego se intenta refrescar red.
-4. **Simulación de tráfico**: se preserva la idea del subproyecto `broadcast-weather` usando OSRM + factor de congestión calculado localmente.
-5. **Persistencia compacta**: el dashboard se guarda como payload serializado para simplificar el arranque offline.
+1. **MVVM** keeps the TV UI separate from business rules.
+2. **Flow** is the main contract between repositories, cache, and view model.
+3. **Resilient refresh** exposes local cache first, then attempts a network refresh.
+4. **Traffic simulation** preserves the `broadcast-weather` idea with OSRM routing plus a local congestion factor.
+5. **Compact persistence** stores the dashboard payload as serialized data for simpler offline startup.
 
-## Diferencias / limitaciones respecto al repositorio original
+## Differences and limitations
 
-- El modo Selenium no se porta literalmente; se adapta a una experiencia nativa de TV.
-- El mapa de tráfico usa rutas OSRM y un factor de congestión simulado, no un iframe de Waze.
-- No existe segunda pantalla táctil; la implementación se concentra en el flujo principal de TV.
-- Las ciudades visibles en el selector se reducen a las del flujo principal del dashboard moderno para mantener navegación remota manejable.
+- Selenium mode is not ported literally; it is adapted into a native TV flow.
+- The traffic view uses OSRM routes plus a simulated congestion layer instead of a Waze iframe.
+- There is no secondary touch display implementation; this project focuses on the primary TV flow.
+- The city selector is intentionally limited to the core broadcast dashboard cities to keep remote navigation manageable.
 
-## TODOs pendientes
+## TODOs
 
-- Integrar tests instrumentados y snapshots visuales para TV.
-- Añadir un modo de configuración protegido para editar ciudades, tiempos y endpoints.
-- Reemplazar iconografía de texto por assets meteorológicos dedicados.
-- Soportar una segunda experiencia complementaria para pantallas auxiliares si el hardware lo requiere.
-- Añadir telemetry/logging remoto opcional para despliegues kiosk.
+- Add TV-focused instrumented tests and visual regression coverage.
+- Add a protected configuration mode for cities, timings, and endpoints.
+- Replace text weather icons with dedicated weather assets.
+- Add optional secondary-screen support if the hardware setup requires it.
+- Add optional remote telemetry/log aggregation for kiosk deployments.

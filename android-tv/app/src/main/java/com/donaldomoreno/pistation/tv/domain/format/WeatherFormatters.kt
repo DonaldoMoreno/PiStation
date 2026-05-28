@@ -5,7 +5,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
-import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -91,6 +90,8 @@ fun formatLastUpdated(epochMillis: Long): String = if (epochMillis <= 0L) {
     Instant.ofEpochMilli(epochMillis).atZone(ZoneId.systemDefault()).format(updatedFormatter)
 }
 
+fun roundToSingleDecimal(value: Double): Double = (value * 10.0).roundToInt() / 10.0
+
 fun haversineDistanceKm(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
     val earthRadiusKm = 6371.0
     val dLat = Math.toRadians(lat2 - lat1)
@@ -99,6 +100,6 @@ fun haversineDistanceKm(lat1: Double, lon1: Double, lat2: Double, lon2: Double):
     val destLat = Math.toRadians(lat2)
     val a = sin(dLat / 2) * sin(dLat / 2) +
         sin(dLon / 2) * sin(dLon / 2) * cos(originLat) * cos(destLat)
-    val c = 2 * kotlin.math.atan2(sqrt(a), sqrt(abs(1 - a)))
+    val c = 2 * kotlin.math.atan2(sqrt(a), sqrt(1 - a))
     return earthRadiusKm * c
 }

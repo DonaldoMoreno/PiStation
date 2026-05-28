@@ -6,7 +6,9 @@ import com.donaldomoreno.pistation.tv.model.MoonPhase
 import kotlin.math.roundToLong
 
 class MoonPhaseService {
+    /** Average lunar synodic cycle length in days. */
     private val synodicMonth = 29.53058867
+    /** Known new moon reference close to 2000-01-06T18:14:00Z. */
     private val referenceEpochMillis = 947183640000L
 
     fun buildAlmanac(

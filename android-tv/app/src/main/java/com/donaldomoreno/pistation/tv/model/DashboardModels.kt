@@ -56,7 +56,14 @@ data class Almanac(
 enum class RouteTrafficStatus {
     FLOW,
     MODERATE,
-    HEAVY,
+    HEAVY;
+
+    val displayName: String
+        get() = when (this) {
+            FLOW -> "Flow"
+            MODERATE -> "Moderate"
+            HEAVY -> "Heavy"
+        }
 }
 
 @Serializable
@@ -91,10 +98,10 @@ enum class DashboardScreenType(
     val label: String,
     val subtitle: String,
 ) {
-    CURRENT("Current", "Condiciones actuales"),
-    OBSERVATIONS("Observations", "Observaciones regionales"),
-    ALMANAC("Almanac", "Sol y luna"),
-    TRAFFIC("Traffic", "Mapa y tiempos de ruta"),
+    CURRENT("Current", "Current conditions"),
+    OBSERVATIONS("Observations", "Regional observations"),
+    ALMANAC("Almanac", "Sun and moon"),
+    TRAFFIC("Traffic", "Map and travel times"),
 }
 
 data class UserSettings(

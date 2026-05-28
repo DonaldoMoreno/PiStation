@@ -34,6 +34,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import kotlin.math.roundToInt
 
+private fun Double.roundToSingleDecimal(): Double = (this * 10.0).roundToInt() / 10.0
+
 interface DashboardRepository {
     fun observeDashboard(): Flow<DashboardData?>
     suspend fun refreshDashboard(city: City): RefreshResult
@@ -160,8 +162,8 @@ class DefaultDashboardRepository(
                     TrafficRoute(
                         id = destination.key,
                         label = "${CityCatalog.routeOrigin.name} → ${destination.name}",
-                        distanceKm = String.format(java.util.Locale.US, "%.1f", distanceKm).toDouble(),
-                        baseMinutes = String.format(java.util.Locale.US, "%.1f", baseMinutes).toDouble(),
+                        distanceKm = distanceKm.roundToSingleDecimal(),
+                        baseMinutes = baseMinutes.roundToSingleDecimal(),
                         adjustedMinutes = simulation.adjustedMinutes,
                         status = simulation.status,
                         colorHex = simulation.colorHex,
@@ -174,8 +176,8 @@ class DefaultDashboardRepository(
                     TrafficRoute(
                         id = destination.key,
                         label = "${CityCatalog.routeOrigin.name} → ${destination.name}",
-                        distanceKm = String.format(java.util.Locale.US, "%.1f", distanceKm).toDouble(),
-                        baseMinutes = String.format(java.util.Locale.US, "%.1f", baseMinutes).toDouble(),
+                        distanceKm = distanceKm.roundToSingleDecimal(),
+                        baseMinutes = baseMinutes.roundToSingleDecimal(),
                         adjustedMinutes = simulation.adjustedMinutes,
                         status = simulation.status,
                         colorHex = simulation.colorHex,

@@ -16,7 +16,8 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
-private const val DEFAULT_ROUTE_COLOR = "#1F8BC8"
+/** Matches the PiStation primary brand blue when no per-route color is available. */
+private const val DEFAULT_ROUTE_COLOR_HEX = "#1F8BC8"
 
 @Composable
 fun RouteMap(
@@ -44,7 +45,7 @@ fun RouteMap(
             if (points.isNotEmpty()) {
                 val polyline = Polyline().apply {
                     setPoints(points)
-                    color = primary?.colorInt ?: android.graphics.Color.parseColor(DEFAULT_ROUTE_COLOR)
+                    color = primary?.colorInt ?: android.graphics.Color.parseColor(DEFAULT_ROUTE_COLOR_HEX)
                     width = 10f
                 }
                 mapView.overlays += polyline

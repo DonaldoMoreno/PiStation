@@ -69,7 +69,7 @@ fun formatTime(iso: String?): String {
     return runCatching {
         Instant.parse(iso).atZone(ZoneId.systemDefault()).format(timeFormatter)
     }.getOrElse {
-        iso
+        "--:--"
     }
 }
 

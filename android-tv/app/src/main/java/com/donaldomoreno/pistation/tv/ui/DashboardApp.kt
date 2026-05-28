@@ -200,6 +200,7 @@ private fun DashboardScreen(
 @Composable
 private fun CurrentConditionsScreen(dashboard: DashboardData?) {
     val current = dashboard?.currentConditions ?: CurrentConditions()
+    val cityName = dashboard?.selectedCity?.name ?: "--"
     Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
         Card(
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.86f)),
@@ -211,7 +212,7 @@ private fun CurrentConditionsScreen(dashboard: DashboardData?) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(dashboard?.selectedCity?.name ?: "--", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+                    Text(cityName, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
                     Text(current.temperature, style = MaterialTheme.typography.displayLarge, fontWeight = FontWeight.ExtraBold)
                     Text(current.condition, style = MaterialTheme.typography.headlineSmall)
                 }

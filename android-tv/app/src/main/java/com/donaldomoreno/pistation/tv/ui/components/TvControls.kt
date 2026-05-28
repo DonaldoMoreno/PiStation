@@ -29,6 +29,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
+/** Small TV focus enlargement that stays readable without causing layout jumps. */
+private const val FOCUS_SCALE_FACTOR = 1.06f
+
 @Composable
 fun TvPillButton(
     text: String,
@@ -37,7 +40,7 @@ fun TvPillButton(
     onClick: () -> Unit,
 ) {
     var isFocused by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(if (isFocused) 1.06f else 1f, label = "tv_scale")
+    val scale by animateFloatAsState(if (isFocused) FOCUS_SCALE_FACTOR else 1f, label = "tv_scale")
     val backgroundColor by animateColorAsState(
         targetValue = when {
             selected -> MaterialTheme.colorScheme.primary

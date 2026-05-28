@@ -5,6 +5,7 @@ import com.donaldomoreno.pistation.tv.data.local.DashboardCacheEntity
 import com.donaldomoreno.pistation.tv.data.network.ForecastResponse
 import com.donaldomoreno.pistation.tv.data.network.OpenMeteoApi
 import com.donaldomoreno.pistation.tv.data.network.OsrmApi
+import com.donaldomoreno.pistation.tv.domain.DashboardConfig
 import com.donaldomoreno.pistation.tv.domain.format.formatPercent
 import com.donaldomoreno.pistation.tv.domain.format.formatPressure
 import com.donaldomoreno.pistation.tv.domain.format.formatTemperatureF
@@ -103,7 +104,7 @@ class DefaultDashboardRepository(
     private suspend fun fetchObservations(selectedCity: City): List<Observation> = coroutineScope {
         CityCatalog.availableCities
             .filterNot { it.key == selectedCity.key }
-            .take(6)
+            .take(DashboardConfig.MAX_OBSERVATIONS)
             .map { city ->
                 async {
                     runCatching {
@@ -140,6 +141,12 @@ class DefaultDashboardRepository(
                 runCatching {
                     val coordinates = "${CityCatalog.routeOrigin.lon},${CityCatalog.routeOrigin.lat};${destination.lon},${destination.lat}"
                     val route = osrmApi.getRoute(coordinates).routes.firstOrNull()
+                    val fallbackDistanceKm = haversineDistanceKm(
+                        CityCatalog.routeOrigin.lat,
+                        CityCatalog.routeOrigin.lon,
+                        destination.lat,
+                        destination.lon,
+                    )
                     val points = route?.geometry?.coordinates
                         ?.mapNotNull { pair ->
                             val lon = pair.getOrNull(0)
@@ -153,8 +160,7 @@ class DefaultDashboardRepository(
                                 RoutePoint(destination.lat, destination.lon),
                             )
                         }
-                    val distanceKm = route?.distance?.div(1000.0)
-                        ?: haversineDistanceKm(CityCatalog.routeOrigin.lat, CityCatalog.routeOrigin.lon, destination.lat, destination.lon)
+                    val distanceKm = route?.distance?.div(1000.0) ?: fallbackDistanceKm
                     val baseMinutes = route?.duration?.div(60.0) ?: (distanceKm / 80.0 * 60.0)
                     val simulation = trafficSimulationService.simulate(destination.key, baseMinutes, now)
 
@@ -169,7 +175,12 @@ class DefaultDashboardRepository(
                         points = points,
                     )
                 }.getOrElse {
-                    val distanceKm = haversineDistanceKm(CityCatalog.routeOrigin.lat, CityCatalog.routeOrigin.lon, destination.lat, destination.lon)
+                    val distanceKm = haversineDistanceKm(
+                        CityCatalog.routeOrigin.lat,
+                        CityCatalog.routeOrigin.lon,
+                        destination.lat,
+                        destination.lon,
+                    )
                     val baseMinutes = distanceKm / 80.0 * 60.0
                     val simulation = trafficSimulationService.simulate(destination.key, baseMinutes, now)
                     TrafficRoute(

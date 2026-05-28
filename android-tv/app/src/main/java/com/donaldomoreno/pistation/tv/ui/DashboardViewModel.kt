@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.donaldomoreno.pistation.tv.data.repository.DashboardRepository
 import com.donaldomoreno.pistation.tv.data.repository.SettingsRepository
+import com.donaldomoreno.pistation.tv.domain.DashboardConfig
 import com.donaldomoreno.pistation.tv.domain.format.formatLastUpdated
 import com.donaldomoreno.pistation.tv.model.City
 import com.donaldomoreno.pistation.tv.model.CityCatalog
@@ -18,12 +19,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-/** Matches the 15-second screen cadence used by the broadcast-weather app. */
-private const val ROTATE_INTERVAL_MS = 15_000L
-
-/** Keeps parity with the original dashboard's 5-minute weather refresh cycle. */
-private const val REFRESH_INTERVAL_MS = 5 * 60 * 1000L
 
 data class DashboardUiState(
     val isLoading: Boolean = true,
@@ -93,7 +88,7 @@ class DashboardViewModel(
         refreshLoopJob?.cancel()
         refreshLoopJob = viewModelScope.launch {
             while (true) {
-                delay(REFRESH_INTERVAL_MS)
+                delay(DashboardConfig.REFRESH_INTERVAL_MS)
                 refreshDashboard(manual = false)
             }
         }
@@ -104,7 +99,7 @@ class DashboardViewModel(
         if (paused) return
         rotationJob = viewModelScope.launch {
             while (true) {
-                delay(ROTATE_INTERVAL_MS)
+                delay(DashboardConfig.ROTATE_INTERVAL_MS)
                 advanceScreen(autoTriggered = true)
             }
         }

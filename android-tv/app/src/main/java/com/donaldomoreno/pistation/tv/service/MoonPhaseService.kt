@@ -6,10 +6,13 @@ import com.donaldomoreno.pistation.tv.model.MoonPhase
 import kotlin.math.roundToLong
 
 class MoonPhaseService {
-    /** Average lunar synodic cycle length in days. */
-    private val synodicMonth = 29.53058867
-    /** Known new moon reference close to 2000-01-06T18:14:00Z. */
-    private val referenceEpochMillis = 947183640000L
+    /** Average lunar synodic cycle length in days, used to estimate repeating moon phases. */
+    private companion object {
+        private const val SYNODIC_MONTH = 29.53058867
+
+        /** Known new moon reference close to 2000-01-06T18:14:00Z. */
+        private const val REFERENCE_EPOCH_MILLIS = 947183640000L
+    }
 
     fun buildAlmanac(
         sunriseToday: String,
@@ -37,13 +40,13 @@ class MoonPhaseService {
     }
 
     private fun moonAge(epochMillis: Long): Double {
-        val age = ((epochMillis - referenceEpochMillis) / 86400000.0) % synodicMonth
-        return if (age < 0) age + synodicMonth else age
+        val age = ((epochMillis - REFERENCE_EPOCH_MILLIS) / 86400000.0) % SYNODIC_MONTH
+        return if (age < 0) age + SYNODIC_MONTH else age
     }
 
     private fun nextPhaseEpoch(targetAge: Double, nowEpochMillis: Long): Long {
         val currentAge = moonAge(nowEpochMillis)
-        val delta = (targetAge - currentAge + synodicMonth) % synodicMonth
+        val delta = (targetAge - currentAge + SYNODIC_MONTH) % SYNODIC_MONTH
         return nowEpochMillis + (delta * 86400000.0).roundToLong()
     }
 
